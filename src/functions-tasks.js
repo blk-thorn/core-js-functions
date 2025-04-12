@@ -73,8 +73,10 @@ function getArgumentsCount(funcs) {
  *   power05(16) => 4
  *
  */
-function getPowerFunction(/* exponent */) {
-  throw new Error('Not implemented');
+function getPowerFunction(exponent) {
+  return function mathPow(x) {
+    return x ** exponent;
+  };
 }
 
 /**
@@ -90,8 +92,18 @@ function getPowerFunction(/* exponent */) {
  *   getPolynom(8)     => y = 8
  *   getPolynom()      => null
  */
-function getPolynom() {
-  throw new Error('Not implemented');
+function getPolynom(...coefficients) {
+  if (coefficients.length === 0) {
+    return null;
+  }
+  return function getCoeff(x) {
+    let result = 0;
+    for (let i = 0; i < coefficients.length; i += 1) {
+      const power = coefficients.length - 1 - i;
+      result += coefficients[i] * x ** power;
+    }
+    return result;
+  };
 }
 
 /**
@@ -108,8 +120,18 @@ function getPolynom() {
  *   ...
  *   memoizer() => the same random number  (next run, returns the previous cached result)
  */
-function memoize(/* func */) {
-  throw new Error('Not implemented');
+function memoize(func) {
+  let cachedResult;
+  let cachedArgs;
+  let hasCached = false;
+  return function getResult(...args) {
+    if (!hasCached || JSON.stringify(args) !== JSON.stringify(cachedArgs)) {
+      cachedResult = func(...args);
+      cachedArgs = args;
+      hasCached = true;
+    }
+    return cachedResult;
+  };
 }
 
 /**
